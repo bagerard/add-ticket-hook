@@ -14,7 +14,7 @@ repos:
       - id: mypy
         language_version: python3
   - repo: https://github.com/hanshoi/add-ticket-hook
-    rev: abad5d1
+    rev: 01d82ac
     hooks:
       - id: add-ticket
         args: ["-t 'test, lol'", "-s"]
