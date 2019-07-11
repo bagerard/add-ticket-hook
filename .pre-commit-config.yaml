@@ -17,3 +17,4 @@ repos:
     rev: master
     hooks:
       - id: add-ticket
+        args: ["-t 'test, lol'"]
