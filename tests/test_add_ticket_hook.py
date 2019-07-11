@@ -1,14 +1,10 @@
 import pytest
-from add_ticket_hook import __version__, add_ticket
+from add_ticket_hook import add_ticket
 
 
 @pytest.fixture
 def options():
     return add_ticket.Options(possible_tags=("test",), strict=False)
-
-
-def test_version():
-    assert __version__ == "0.1.0"
 
 
 def test_parse_tag():
