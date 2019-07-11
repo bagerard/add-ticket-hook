@@ -132,6 +132,7 @@ def get_current_branch_name():
 
 def main():
     # type: () -> int
+
     # try:
     branch_name = get_current_branch_name()
     print(branch_name)
