@@ -132,14 +132,14 @@ def get_current_branch_name():
 
 def main():
     # type: () -> int
-    try:
-        branch_name = get_current_branch_name()
-        print(branch_name)
-        # ensure_ticket_in_commit()
-        return 0
-    except Exception as e:
-        print(str(e))
-        return 1
+    # try:
+    branch_name = get_current_branch_name()
+    print(branch_name)
+    # ensure_ticket_in_commit()
+    return 0
+    # except Exception as e:
+    # print(str(e))
+    # return 1
 
 
 if __name__ == "__main__":
