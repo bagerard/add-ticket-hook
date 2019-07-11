@@ -24,7 +24,7 @@ from __future__ import print_function
 
 import re
 import typing
-import sys
+import argparse
 
 from collections import namedtuple
 from pre_commit_hooks.util import CalledProcessError
@@ -130,18 +130,39 @@ def get_current_branch_name():
         return ""
 
 
-def main():
-    # type: () -> int
+def parse_args(argv):
+    # type: (typing.Optional[typing.Sequence[str]]) -> typing.Tuple[str, Options]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filenames", nargs="*", help="Commit filename")
+    parser.add_argument(
+        "-t",
+        "--tags",
+        action="append",
+        help="Possible tags that could be ticket prefixes.",
+    )
+    parser.add_argument(
+        "-s",
+        "--strict",
+        action="store_true",
+        help="Fail if no tag is found",
+        default=False,
+    )
+    args = parser.parse_args(argv)
+    return (args.filenames[0], Options(possible_tags=args.tags, strict=args.strict))
 
-    # try:
-    branch_name = get_current_branch_name()
-    print(branch_name)
-    # ensure_ticket_in_commit()
-    return 0
-    # except Exception as e:
-    # print(str(e))
-    # return 1
+
+def main(argv=None):
+    # type: (typing.Optional[typing.Sequence[str]]) -> int
+    try:
+        filename, options = parse_args(argv)
+        branch_name = get_current_branch_name()
+
+        alter_message(filename=filename, branch_name=branch_name, options=options)
+        return 0
+    except Exception as e:
+        print(str(e))
+        return 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    exit(main())
