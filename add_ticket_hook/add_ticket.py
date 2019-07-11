@@ -25,10 +25,9 @@ from __future__ import print_function
 import re
 import typing
 import argparse
+import subprocess
 
 from collections import namedtuple
-from pre_commit_hooks.util import CalledProcessError
-from pre_commit_hooks.util import cmd_output
 
 
 Options = namedtuple("Options", "possible_tags,strict")
@@ -124,9 +123,11 @@ def alter_message(filename, branch_name, options):
 def get_current_branch_name():
     # type: () -> str
     try:
-        branch_name = cmd_output("git", "rev-parse", "--abbrev-ref", "HEAD")
+        branch_name = str(
+            subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+        )
         return branch_name.strip()
-    except (CalledProcessError, AttributeError):
+    except (RuntimeError, AttributeError):
         return ""
 
 
