@@ -138,7 +138,7 @@ def parse_args(argv):
         "-t",
         "--tags",
         action="append",
-        help="Possible tags that could be ticket prefixes.",
+        help="Possible tags that could be ticket prefixes. Comma separated list.",
     )
     parser.add_argument(
         "-s",
@@ -148,7 +148,14 @@ def parse_args(argv):
         default=False,
     )
     args = parser.parse_args(argv)
-    return (args.filenames[0], Options(possible_tags=args.tags, strict=args.strict))
+
+    assert args.filenames
+    assert args.tags
+
+    return (
+        args.filenames[0],
+        Options(possible_tags=args.tags.split(","), strict=args.strict),
+    )
 
 
 def main(argv=None):
