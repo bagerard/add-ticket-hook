@@ -13,7 +13,7 @@ repos:
     hooks:
       - id: mypy
         language_version: python3
-  - repo: .
+  - repo: https://github.com/hanshoi/add-ticket-hook
     rev: 01d4259d6d55deda023d8f643861e1d90d1ab99b
     hooks:
       - id: add-ticket
