@@ -1,7 +1,7 @@
 - id: add-ticket
   name: Add Ticket Number
   description: Prefixes ticket name and number to commit message.
-  entry: add-ticket
+  entry: add_ticket
   language: python
   stages: [commit-msg]
   always_run: True
