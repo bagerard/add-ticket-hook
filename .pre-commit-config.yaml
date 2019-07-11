@@ -14,7 +14,7 @@ repos:
       - id: mypy
         language_version: python3
   - repo: .
-    rev: master
+    rev: 6e9fb28
     hooks:
       - id: add-ticket
         args: ["-t 'test, lol'"]
