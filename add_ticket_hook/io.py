@@ -22,9 +22,9 @@ def write_commit_message(filename, message):
 def get_current_branch_name():
     # type: () -> str
     try:
-        branch_name = str(
-            subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+        branch_name = subprocess.check_output(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"]
         )
-        return branch_name.strip()
+        return branch_name.strip(b" \n\t\r'\"").decode("utf-8")
     except (RuntimeError, AttributeError):
         return ""
