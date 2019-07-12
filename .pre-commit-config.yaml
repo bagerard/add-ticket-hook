@@ -23,4 +23,4 @@ repos:
         entry: add-ticket
         language: python
         stages: [prepare-commit-msg]
-        args: ["--tags='test,lol'", -s]
+        args: ["--tags='test,lol'"]
