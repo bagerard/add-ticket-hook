@@ -1,0 +1,7 @@
+-e .
+pytest==3.6
+pre-commit==1.17
+flake8==3.7
+mypy==0.711.0
+black==19.3b0
+pytest-cov==2.7
