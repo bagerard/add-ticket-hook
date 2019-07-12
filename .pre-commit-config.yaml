@@ -16,8 +16,11 @@ repos:
       - id: mypy
         stages: [commit]
         language_version: python3
-  # - repo: .
-    # rev: 01d82ac
-    # hooks:
-      # - id: add-ticket
-        # args: [--tags='test, lol', -s]
+  - repo: local
+    hooks:
+      - id: add-ticket
+        name: add ticket
+        entry: add-ticket
+        language: python
+        stages: [prepare-commit-msg]
+        args: ["--tags='test,lol'", -s]

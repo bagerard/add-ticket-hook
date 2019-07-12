@@ -131,8 +131,8 @@ def get_current_branch_name():
         return ""
 
 
-def parse_args(argv):
-    # type: (typing.Optional[typing.Sequence[str]]) -> typing.Tuple[str, Options]
+def parse_args():
+    # type: () -> typing.Tuple[str, Options]
     parser = argparse.ArgumentParser()
     parser.add_argument("filenames", nargs="*", help="Commit filename")
     parser.add_argument(
@@ -148,10 +148,10 @@ def parse_args(argv):
         help="Fail if no tag is found",
         default=False,
     )
-    args = parser.parse_args(argv)
+    args = parser.parse_args()
 
-    assert args.filenames
-    assert args.tags
+    assert args.filenames, "No commit filename given"
+    assert args.tags, "No tags specified in config"
 
     return (
         args.filenames[0],
@@ -159,12 +159,11 @@ def parse_args(argv):
     )
 
 
-def main(argv=None):
-    # type: (typing.Optional[typing.Sequence[str]]) -> int
+def main():
+    # type: () -> int
     try:
-        filename, options = parse_args(argv)
+        filename, options = parse_args()
         branch_name = get_current_branch_name()
-
         alter_message(filename=filename, branch_name=branch_name, options=options)
         return 0
     except Exception as e:
