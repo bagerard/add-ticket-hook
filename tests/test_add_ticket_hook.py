@@ -1,5 +1,5 @@
 import pytest
-from add_ticket_hook import add_ticket
+import add_ticket
 
 
 @pytest.fixture
