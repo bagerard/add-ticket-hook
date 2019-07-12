@@ -62,3 +62,35 @@ def test_parse_args(args, filename, tags, strict):
     assert _filename == filename
     assert options.possible_tags == tags
     assert options.strict is strict
+
+
+@pytest.mark.parametrize(
+    "message,branch_name,alt_msg",
+    [
+        ("", "", ""),
+        ("", "test-13", "test-13: "),
+        ("", "__", ""),
+        ("", "test", ": "),  # TODO: fix this
+        ("test-1234", "", "test-1234"),
+        ("random... test-1234", "", "random... test-1234"),
+        ("random... test-1234", "lol-1", "lol-1: random... test-1234"),
+        ("random... test-1234", "lol-1ARC", "lol-1: random... test-1234"),
+    ],
+)
+def test_alter_message(message, branch_name, alt_msg, options):
+    assert main.alter_message(message, branch_name, options) == alt_msg
+
+
+@pytest.mark.parametrize(
+    "message,branch_name,alt_msg",
+    [
+        ("", "", ""),
+        ("", "__", ""),
+        # ("", "test", ": "),  # TODO: fix this
+        ("random... test-1234", "", "random... test-1234"),
+    ],
+)
+def test_alter_message_strict(message, branch_name, alt_msg):
+    options = main.Options(possible_tags=("test", "lol"), strict=True)
+    with pytest.raises(ValueError):
+        main.alter_message(message, branch_name, options)
