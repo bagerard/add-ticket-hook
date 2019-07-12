@@ -15,7 +15,8 @@ Your `.pre-commit-config.yaml` could look like this:
 
 ```yaml
 - repo: https://github.com/hanshoi/add-ticket-hook
-    hooks:
-      - id: add-ticket
-        args: ["--tags='TAG,ANOTHERTAG'"]
+  rev: v0.1.0
+  hooks:
+    - id: add-ticket
+      args: ["--tags='TAG,ANOTHERTAG'"]
 ```

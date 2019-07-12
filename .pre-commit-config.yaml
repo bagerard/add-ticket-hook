@@ -17,7 +17,7 @@ repos:
         stages: [commit]
         language_version: python3
   - repo: https://github.com/hanshoi/add-ticket-hook
-    rev: v0.1.0
+    rev: v0.1.1
     hooks:
       - id: add-ticket
         args: ["--tags='test,lol'"]
