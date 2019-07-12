@@ -20,3 +20,8 @@ Your `.pre-commit-config.yaml` could look like this:
     - id: add-ticket
       args: ["--tags='TAG,ANOTHERTAG'"]
 ```
+
+## Possible Args
+
+`-s` `--strict`: Will fail if there is no ticket name and number present (default: False)
+`-t` `--tags`: Tags that would correspond to ticket name
