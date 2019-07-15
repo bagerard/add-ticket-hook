@@ -74,27 +74,24 @@ def is_tagged(message, options):
     # type: (str, Options) -> bool
     """ check if commit message has already a tag in it.
     """
-    pattern = r"^(?P<ticket>{})-(\d+)".format("|".join(options.possible_tags))
-    ticket = re.search(pattern, message)
+    ticket = parse_ticket(message, options)
     return ticket is not None
 
 
-def parse_tagnum_from_branch(branch_name):
-    # type: (str) -> typing.List[str]
-    match = re.match(r"^[a-zA-Z]*-\d*", branch_name)
+def parse_ticket(text, options):
+    # type: (str, Options) -> typing.Optional[str]
+    pattern = r"^(?P<ticket>{})-(\d+)".format("|".join(options.possible_tags))
+    match = re.search(pattern, text)
     if match:
-        stripped_name = match.group()
-        return stripped_name.split("-")
-    return ["", ""]
+        return match.group(0)
+    return None
 
 
-def get_tagnum_from_branch(branch_name, options):
+def get_ticket_from_branch(branch_name, options):
     # type: (str, Options) -> str
-    tag, ticket_number = parse_tagnum_from_branch(branch_name)
+    ticket = parse_ticket(branch_name, options)
 
-    if tag in options.possible_tags:
-        return "{}-{}".format(tag, ticket_number)
-    return ""
+    return ticket or ""
 
 
 def alter_message(message, branch_name, options):
@@ -121,7 +118,7 @@ def alter_message(message, branch_name, options):
     branch_is_tagged = is_tagged(branch_name, options)
 
     if branch_is_tagged:
-        tag = get_tagnum_from_branch(branch_name, options)
+        tag = get_ticket_from_branch(branch_name, options)
         return "{}: {}".format(tag, message)
 
     if options.strict:

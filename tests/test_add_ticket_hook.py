@@ -35,19 +35,19 @@ def test_is_not_tagged(message, options):
 @pytest.mark.parametrize(
     "message", ["test-124: anothu", "test-124", "test-124ASHT", "test-124-ASHT"]
 )
-def test_parse_tagnum(message, options):
-    assert main.get_tagnum_from_branch(message, options) == "test-124"
+def test_parse_ticket(message, options):
+    assert main.get_ticket_from_branch(message, options) == "test-124"
 
 
 def test_parse_another_tagnum(options):
-    assert main.get_tagnum_from_branch("lol-123ARCGH", options) == "lol-123"
+    assert main.get_ticket_from_branch("lol-123ARCGH", options) == "lol-123"
 
 
 @pytest.mark.parametrize(
     "message", ["", "TEST-1234:aoseth", "t-1234:aoseth", "1234", "sthaoe test-1234 "]
 )
 def test_tag_num_not_found(message, options):
-    assert main.get_tagnum_from_branch(message, options) == ""
+    assert main.get_ticket_from_branch(message, options) == ""
 
 
 @pytest.mark.parametrize(
