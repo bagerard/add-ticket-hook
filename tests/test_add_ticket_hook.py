@@ -4,7 +4,7 @@ from add_ticket_hook import main
 
 @pytest.fixture
 def options():
-    return main.Options(possible_tags=("test", "lol"), strict=False)
+    return main.Options(prefixes=("test", "lol"), strict=False)
 
 
 @pytest.mark.parametrize(
@@ -36,27 +36,27 @@ def test_ticket_not_found(message, options):
 
 
 @pytest.mark.parametrize(
-    "args,filename,tags,strict",
+    "args,filename,prefixes,strict",
     [
-        (["commitfile", "--tags='test,lol'"], "commitfile", ["test", "lol"], False),
-        (["commitfile", "--tags='test'", "-s"], "commitfile", ["test"], True),
-        (["commitfile", "--tags='test'", "--strict"], "commitfile", ["test"], True),
-        (["commitfile", "-t 'test'"], "commitfile", ["test"], False),
-        (["commitfile", "-t test"], "commitfile", ["test"], False),
-        (["commitfile", "-t test", "-t lol"], "commitfile", ["test", "lol"], False),
-        (["commitfile", "-t test", "-t ',lol'"], "commitfile", ["test", "lol"], False),
+        (["commitfile", "--prefixes='test,lol'"], "commitfile", ["test", "lol"], False),
+        (["commitfile", "--prefixes='test'", "-s"], "commitfile", ["test"], True),
+        (["commitfile", "--prefixes='test'", "--strict"], "commitfile", ["test"], True),
+        (["commitfile", "-p 'test'"], "commitfile", ["test"], False),
+        (["commitfile", "-p test"], "commitfile", ["test"], False),
+        (["commitfile", "-p test", "-p lol"], "commitfile", ["test", "lol"], False),
+        (["commitfile", "-p test", "-p ',lol'"], "commitfile", ["test", "lol"], False),
         (
-            ["commitfile", "--tags='test'", "--strict", "-t lol"],
+            ["commitfile", "--prefixes='test'", "--strict", "-p lol"],
             "commitfile",
             ["test", "lol"],
             True,
         ),
     ],
 )
-def test_parse_args(args, filename, tags, strict):
+def test_parse_args(args, filename, prefixes, strict):
     _filename, options = main.parse_args(args)
     assert _filename == filename
-    assert options.possible_tags == tags
+    assert options.prefixes == prefixes
     assert options.strict is strict
 
 
@@ -87,6 +87,6 @@ def test_alter_message(message, branch_name, alt_msg, options):
     ],
 )
 def test_alter_message_strict(message, branch_name, alt_msg):
-    options = main.Options(possible_tags=("test", "lol"), strict=True)
+    options = main.Options(prefixes=("test", "lol"), strict=True)
     with pytest.raises(ValueError):
         main.alter_message(message, branch_name, options)

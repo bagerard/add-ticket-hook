@@ -5,18 +5,18 @@ on given rules.
 
 Commits themselves should use convention::
 
-    'TAG-1234: Commit message'
+    '<prefix>1234: Commit message'
 
-To us branch as basis for commit message creation. Then they should start with::
+To use branch as basis for commit message creation. Then they should start with::
 
-    TAG-1234
+    <prefix>1234
 
 This means that following branch names are okay::
 
-    TAG-1234
-    TAG-1234_human_readable
-    TAG-1234.human.readable
-    TAG-1234HUMANREADABLE
+    <prefix>1234
+    <prefix>1234_human_readable
+    <prefix>1234.human.readable
+    <prefix>1234HUMANREADABLE
 
 as long next char after ticket number is not digit, its okay.
 """
@@ -31,7 +31,7 @@ from collections import namedtuple
 from . import io
 
 
-Options = namedtuple("Options", "possible_tags,strict")
+Options = namedtuple("Options", "prefixes,strict")
 
 
 def parse_args(argv=None):
@@ -39,40 +39,40 @@ def parse_args(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("filenames", nargs="*", help="Commit filename")
     parser.add_argument(
-        "-t",
-        "--tags",
+        "-p",
+        "--prefixes",
         action="append",
-        help="Possible tags that could be ticket prefixes. Comma separated list.",
+        help="Possible ticket prefixes. Comma separated list.",
     )
     parser.add_argument(
         "-s",
         "--strict",
         action="store_true",
-        help="Fail if no tag is found",
+        help="Fail if no ticket is found",
         default=False,
     )
     args = parser.parse_args(argv)
 
     assert args.filenames, "No commit filename given"
-    assert args.tags, "No tags specified in config"
+    assert args.prefixes, "No prefixes specified in config"
 
-    tags = parse_tags(args.tags)
+    prefixes = parse_prefixes(args.prefixes)
 
-    return (args.filenames[0], Options(possible_tags=tags, strict=args.strict))
+    return (args.filenames[0], Options(prefixes=prefixes, strict=args.strict))
 
 
-def parse_tags(tags):
+def parse_prefixes(prefixes):
     # type: (typing.List[str]) -> typing.List[str]
-    tags_str = ",".join(tags)
+    prefix_str = ",".join(prefixes)
     for char in "\"' ":
-        tags_str = tags_str.replace(char, "")
+        prefix_str = prefix_str.replace(char, "")
 
-    return [tag for tag in tags_str.split(",") if tag]
+    return [prefix for prefix in prefix_str.split(",") if prefix]
 
 
 def parse_ticket(text, options):
     # type: (str, Options) -> typing.Optional[str]
-    pattern = r"^(?P<ticket>{})-(\d+)".format("|".join(options.possible_tags))
+    pattern = r"^(?P<ticket>{})-(\d+)".format("|".join(options.prefixes))
     match = re.search(pattern, text)
     if match:
         return match.group(0)
@@ -83,7 +83,7 @@ def alter_message(message, branch_name, options):
     # type: (str, str, Options) -> str
     """ Alter message content if needed
 
-    tag is not added if it cannot be parsed from branch,
+    prefix is not added if it cannot be parsed from branch,
     or it already exists.
 
     Args:
