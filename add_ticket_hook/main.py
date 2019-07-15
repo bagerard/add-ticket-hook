@@ -74,8 +74,9 @@ def is_tagged(message, options):
     # type: (str, Options) -> bool
     """ check if commit message has already a tag in it.
     """
-    found_tag = message.split("-")[0].strip()
-    return found_tag in options.possible_tags
+    pattern = r"^(?P<ticket>{})-(\d+)".format("|".join(options.possible_tags))
+    ticket = re.search(pattern, message)
+    return ticket is not None
 
 
 def parse_tagnum_from_branch(branch_name):

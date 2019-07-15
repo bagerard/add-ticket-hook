@@ -8,14 +8,25 @@ def options():
 
 
 @pytest.mark.parametrize(
-    "message", ["test-1235: anothu", "test", "test-", "test-124ASHT", "test-124-ASHT"]
+    "message",
+    ["test-1235: anothu", "test-1", "test-12.", "test-124ASHT", "test-124-ASHT"],
 )
 def test_is_tagged(message, options):
     assert main.is_tagged(message, options) is True
 
 
 @pytest.mark.parametrize(
-    "message", ["", "TEST-1234:aoseth", "t-1234:aoseth", "1234", "sthaoe test-1234 "]
+    "message",
+    [
+        "",
+        "TEST-1234:aoseth",
+        "t-1234:aoseth",
+        "1234",
+        "sthaoe test-1234 ",
+        "test-",
+        "test",
+        "lol",
+    ],
 )
 def test_is_not_tagged(message, options):
     assert main.is_tagged(message, options) is False
@@ -70,7 +81,7 @@ def test_parse_args(args, filename, tags, strict):
         ("", "", ""),
         ("", "test-13", "test-13: "),
         ("", "__", ""),
-        ("", "test", ": "),  # TODO: fix this
+        ("", "test", ""),
         ("test-1234", "", "test-1234"),
         ("random... test-1234", "", "random... test-1234"),
         ("random... test-1234", "lol-1", "lol-1: random... test-1234"),
@@ -86,7 +97,7 @@ def test_alter_message(message, branch_name, alt_msg, options):
     [
         ("", "", ""),
         ("", "__", ""),
-        # ("", "test", ": "),  # TODO: fix this
+        ("", "test", ": "),
         ("random... test-1234", "", "random... test-1234"),
     ],
 )
