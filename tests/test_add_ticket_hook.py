@@ -4,7 +4,7 @@ from add_ticket_hook import main
 
 @pytest.fixture
 def options():
-    return main.Options(prefixes=("test-", "lol-"), strict=False)
+    return main.Options(prefixes=("test-", "lol-", "#"), strict=False)
 
 
 @pytest.mark.parametrize(
@@ -12,6 +12,11 @@ def options():
 )
 def test_parse_ticket(message, options):
     assert main.parse_ticket(message, options) == "test-124"
+
+
+@pytest.mark.parametrize("message", ["#123", "#123ASNTH", "#123."])
+def test_parse_ticket_github_format(message, options):
+    assert main.parse_ticket(message, options) == "#123"
 
 
 def test_parse_another_ticket(options):
@@ -29,6 +34,8 @@ def test_parse_another_ticket(options):
         "test-",
         "test",
         "lol",
+        "#",
+        "#AENSH",
     ],
 )
 def test_ticket_not_found(message, options):
@@ -52,6 +59,7 @@ def test_ticket_not_found(message, options):
             True,
         ),
         (["commitfile", "-p 'test-'"], "commitfile", ["test-"], False),
+        (["commitfile", "-p '#'"], "commitfile", ["#"], False),
         (["commitfile", "-p test-"], "commitfile", ["test-"], False),
         (["commitfile", "-p test-", "-p lol-"], "commitfile", ["test-", "lol-"], False),
         (
