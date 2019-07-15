@@ -72,7 +72,7 @@ def parse_prefixes(prefixes):
 
 def parse_ticket(text, options):
     # type: (str, Options) -> typing.Optional[str]
-    pattern = r"^(?P<ticket>{})-(\d+)".format("|".join(options.prefixes))
+    pattern = r"^(?P<ticket>{})(\d+)".format("|".join(options.prefixes))
     match = re.search(pattern, text)
     if match:
         return match.group(0)

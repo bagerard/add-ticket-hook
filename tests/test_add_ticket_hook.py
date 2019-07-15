@@ -4,7 +4,7 @@ from add_ticket_hook import main
 
 @pytest.fixture
 def options():
-    return main.Options(prefixes=("test", "lol"), strict=False)
+    return main.Options(prefixes=("test-", "lol-"), strict=False)
 
 
 @pytest.mark.parametrize(
@@ -38,17 +38,32 @@ def test_ticket_not_found(message, options):
 @pytest.mark.parametrize(
     "args,filename,prefixes,strict",
     [
-        (["commitfile", "--prefixes='test,lol'"], "commitfile", ["test", "lol"], False),
-        (["commitfile", "--prefixes='test'", "-s"], "commitfile", ["test"], True),
-        (["commitfile", "--prefixes='test'", "--strict"], "commitfile", ["test"], True),
-        (["commitfile", "-p 'test'"], "commitfile", ["test"], False),
-        (["commitfile", "-p test"], "commitfile", ["test"], False),
-        (["commitfile", "-p test", "-p lol"], "commitfile", ["test", "lol"], False),
-        (["commitfile", "-p test", "-p ',lol'"], "commitfile", ["test", "lol"], False),
         (
-            ["commitfile", "--prefixes='test'", "--strict", "-p lol"],
+            ["commitfile", "--prefixes='test-,lol-'"],
             "commitfile",
-            ["test", "lol"],
+            ["test-", "lol-"],
+            False,
+        ),
+        (["commitfile", "--prefixes='test-'", "-s"], "commitfile", ["test-"], True),
+        (
+            ["commitfile", "--prefixes='test-'", "--strict"],
+            "commitfile",
+            ["test-"],
+            True,
+        ),
+        (["commitfile", "-p 'test-'"], "commitfile", ["test-"], False),
+        (["commitfile", "-p test-"], "commitfile", ["test-"], False),
+        (["commitfile", "-p test-", "-p lol-"], "commitfile", ["test-", "lol-"], False),
+        (
+            ["commitfile", "-p test-", "-p ',lol-'"],
+            "commitfile",
+            ["test-", "lol-"],
+            False,
+        ),
+        (
+            ["commitfile", "--prefixes='test-'", "--strict", "-p lol-"],
+            "commitfile",
+            ["test-", "lol-"],
             True,
         ),
     ],
@@ -87,6 +102,6 @@ def test_alter_message(message, branch_name, alt_msg, options):
     ],
 )
 def test_alter_message_strict(message, branch_name, alt_msg):
-    options = main.Options(prefixes=("test", "lol"), strict=True)
+    options = main.Options(prefixes=("test-", "lol-"), strict=True)
     with pytest.raises(ValueError):
         main.alter_message(message, branch_name, options)
