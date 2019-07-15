@@ -70,14 +70,6 @@ def parse_tags(tags):
     return [tag for tag in tags_str.split(",") if tag]
 
 
-def is_tagged(message, options):
-    # type: (str, Options) -> bool
-    """ check if commit message has already a tag in it.
-    """
-    ticket = parse_ticket(message, options)
-    return ticket is not None
-
-
 def parse_ticket(text, options):
     # type: (str, Options) -> typing.Optional[str]
     pattern = r"^(?P<ticket>{})-(\d+)".format("|".join(options.possible_tags))
@@ -85,13 +77,6 @@ def parse_ticket(text, options):
     if match:
         return match.group(0)
     return None
-
-
-def get_ticket_from_branch(branch_name, options):
-    # type: (str, Options) -> str
-    ticket = parse_ticket(branch_name, options)
-
-    return ticket or ""
 
 
 def alter_message(message, branch_name, options):
@@ -109,17 +94,15 @@ def alter_message(message, branch_name, options):
     Returns:
         altered message that includes ticket prefix (probably)
     """
-    commit_is_tagged = is_tagged(message, options)
+    ticket_from_commit = parse_ticket(message, options)
 
-    # commit is already tagged, nothing to do here
-    if commit_is_tagged:
+    if ticket_from_commit:
         return message
 
-    branch_is_tagged = is_tagged(branch_name, options)
+    ticket_from_branch = parse_ticket(branch_name, options)
 
-    if branch_is_tagged:
-        tag = get_ticket_from_branch(branch_name, options)
-        return "{}: {}".format(tag, message)
+    if ticket_from_branch:
+        return "{}: {}".format(ticket_from_branch, message)
 
     if options.strict:
         raise ValueError(

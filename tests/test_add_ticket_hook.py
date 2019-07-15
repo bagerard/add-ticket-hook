@@ -8,11 +8,14 @@ def options():
 
 
 @pytest.mark.parametrize(
-    "message",
-    ["test-1235: anothu", "test-1", "test-12.", "test-124ASHT", "test-124-ASHT"],
+    "message", ["test-124: anothu", "test-124", "test-124ASHT", "test-124-ASHT"]
 )
-def test_is_tagged(message, options):
-    assert main.is_tagged(message, options) is True
+def test_parse_ticket(message, options):
+    assert main.parse_ticket(message, options) == "test-124"
+
+
+def test_parse_another_ticket(options):
+    assert main.parse_ticket("lol-123ARCGH", options) == "lol-123"
 
 
 @pytest.mark.parametrize(
@@ -28,26 +31,8 @@ def test_is_tagged(message, options):
         "lol",
     ],
 )
-def test_is_not_tagged(message, options):
-    assert main.is_tagged(message, options) is False
-
-
-@pytest.mark.parametrize(
-    "message", ["test-124: anothu", "test-124", "test-124ASHT", "test-124-ASHT"]
-)
-def test_parse_ticket(message, options):
-    assert main.get_ticket_from_branch(message, options) == "test-124"
-
-
-def test_parse_another_tagnum(options):
-    assert main.get_ticket_from_branch("lol-123ARCGH", options) == "lol-123"
-
-
-@pytest.mark.parametrize(
-    "message", ["", "TEST-1234:aoseth", "t-1234:aoseth", "1234", "sthaoe test-1234 "]
-)
-def test_tag_num_not_found(message, options):
-    assert main.get_ticket_from_branch(message, options) == ""
+def test_ticket_not_found(message, options):
+    assert main.parse_ticket(message, options) is None
 
 
 @pytest.mark.parametrize(
