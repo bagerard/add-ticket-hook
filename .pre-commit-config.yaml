@@ -16,7 +16,7 @@ repos:
       - id: mypy
         stages: [commit]
         language_version: python3
-  - repo: https://github.com/hanshoi/add-ticket-hook
+  - repo: https://github.com/bagerard/add-ticket-hook
     rev: v0.1.1
     hooks:
       - id: add-ticket

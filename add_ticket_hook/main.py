@@ -102,7 +102,7 @@ def alter_message(message, branch_name, options):
     ticket_from_branch = parse_ticket(branch_name, options)
 
     if ticket_from_branch:
-        return "{}: {}".format(ticket_from_branch, message)
+        return "{}: {}\n".format(ticket_from_branch, message)
 
     if options.strict:
         raise ValueError(

@@ -23,7 +23,7 @@ Your `.pre-commit-config.yaml` could look like this:
 For JIRA:
 
 ```yaml
-- repo: https://github.com/hanshoi/add-ticket-hook
+- repo: https://github.com/bagerard/add-ticket-hook
   rev: v0.1.2
   hooks:
     - id: add-ticket
@@ -33,7 +33,7 @@ For JIRA:
 For GitHub:
 
 ```yaml
-- repo: https://github.com/hanshoi/add-ticket-hook
+- repo: https://github.com/bagerard/add-ticket-hook
   rev: v0.1.2
   hooks:
     - id: add-ticket
