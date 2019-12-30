@@ -102,7 +102,11 @@ def alter_message(message, branch_name, options):
     ticket_from_branch = parse_ticket(branch_name, options)
 
     if ticket_from_branch:
-        return "{}: {}\n".format(ticket_from_branch, message)
+        default_commit_message = message.startswith("# Please enter the commit message")
+        if default_commit_message:
+            return "{}:\n{}".format(ticket_from_branch, message)
+        else:
+            return "{}: {}".format(ticket_from_branch, message)
 
     if options.strict:
         raise ValueError(
